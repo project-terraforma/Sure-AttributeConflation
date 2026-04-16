@@ -1,10 +1,6 @@
 # Sure-AttributeConflation
-<<<<<<< HEAD
-## Author: Srithija Sure
-Project A: building a system to combine conflicting data from multiple sources into a single, accurate record for each place
-=======
 ## Overview of the Project
-(Project A) In this project, I will focus on resolving issues with conflicting information about the same place across different sources (Google Maps, Yelp, Apple Maps, etc.).
+Project A: In this project, I will focus on resolving issues with conflicting information about the same place across different sources (Google Maps, Yelp, Apple Maps, etc.).
 Definition: When different sources provide slightly different information (i.e. phone numbers, names, websites), it gets confusing on what information is accurate. The goal of this project is to fix exactly that by creating something that can select the most accurate and reliable version.
 
 ## Problem
@@ -17,4 +13,3 @@ An example includes:
 
 ## Objective
 Build a system that automatically chooses the most accurate information from multiple sources.
->>>>>>> 0bc1a11 (Updated README.md to clarify more on project)
