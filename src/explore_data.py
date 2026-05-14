@@ -1,5 +1,6 @@
 import pandas as pd
 import json
+from collections import Counter
 
 
 df = pd.read_parquet("data/project_a_samples.parquet")
@@ -36,3 +37,15 @@ for i in range(5):
 
 print("\nMISSING VALUES (OVERTURE):") #looking for any missing values in the overture dataset
 print(df[['names', 'phones', 'websites']].isnull().sum())
+
+labels = (item['labels']['name']for item in golden_data)
+print("\nLABEL DISTRIBUTION (MAYHEM)")
+print(Counter(labels)) #labelling analysis
+
+print("\nBASE_ID GROUPING (OVERTURE):")
+print(df['base_id'].value_counts().head())
+
+print("\nBASE_ID GROUPING (MAYHEM)")
+base_ids = [item['base_id'] for item in golden_data]
+print(Counter(base_ids).most_common(5))
+#print(df['base_id'].value_labels().head())
