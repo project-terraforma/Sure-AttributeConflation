@@ -33,3 +33,6 @@ print("\nCLEAN NAMES:")
 for i in range(5):
     name = df.iloc[i]['names']
     print(get_primary_name(name))
+
+print("\nMISSING VALUES (OVERTURE):") #looking for any missing values in the overture dataset
+print(df[['names', 'phones', 'websites']].isnull().sum())
