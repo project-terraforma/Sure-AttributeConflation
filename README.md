@@ -11,5 +11,21 @@ An example includes:
 - Different phone numbers
 - Missing websites or leading to another page that's not active
 
-## Objective
-Build a system that automatically chooses the most accurate information from multiple sources.
+## OKRs
+# <ins>Objective 1: Explore, understand, and compare datasets</ins>
+_Key Results:_
+    * Load and explore the datasets (Mayhem and Overture) to identify key attributes (name, phone number, website)
+    * Compare data quality (i.e. missing values and formatting differences)
+    * Analyze label distribution (i.e. “same” vs. “current”) and record structure (base_id grouping)
+# <ins>Objective 2: Develop and compare attribute selection methods</ins>
+_Key Results:_
+    * Implement a simple-rule based baseline for attribute selection
+    * Add a similarity-based approach (i.e. name similarity using RapidBuzz)
+    * Evaluate both methods using accuracy and compare their performance
+# <ins>Objective 3: Analyze performance and identify improvements</ins>
+_Key Results:_
+    * Identify 1-2 common failure cases
+    * Can be formatting differences vs. real conflicts
+    * Explain when each method performs better or worse
+    * Propose 1-2 improvements based on observed results
+
