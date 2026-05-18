@@ -1,7 +1,7 @@
 import pandas as pd
 import json
 from collections import Counter
-
+from models.rule_based_method import get_clean_name, pick_longest_name
 
 df = pd.read_parquet("data/project_a_samples.parquet")
 
@@ -49,3 +49,4 @@ print("\nBASE_ID GROUPING (MAYHEM)")
 base_ids = [item['base_id'] for item in golden_data]
 print(Counter(base_ids).most_common(5))
 #print(df['base_id'].value_labels().head())
+
