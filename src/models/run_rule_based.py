@@ -1,7 +1,7 @@
 import pandas as pd
 import json
 
-from models.rule_based_method import (
+from rule_based_method import (
     get_clean_name,
     predict_label
 )

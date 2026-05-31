@@ -6,10 +6,14 @@ def get_clean_name(name_str):
         return name_dict.get("primary", "")
     except:
         return ""
+
+
 def predict_label(current, base):
     """
-    Predict whether the current value, base value,
-    or both values should be selected.
+    Rule-based prediction:
+    - same: names are identical
+    - base: base name is longer
+    - current: otherwise
     """
 
     if current == base:
@@ -18,7 +22,8 @@ def predict_label(current, base):
         return "base"
     else:
         return "current"
-# quick tests
+
+
 if __name__ == "__main__":
     print(predict_label("BP", "BP"))  # same
     print(predict_label("Norauto España", "Norauto"))  # current
