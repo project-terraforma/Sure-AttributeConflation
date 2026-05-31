@@ -1,22 +1,38 @@
 import pandas as pd
-from rule_based_method import get_clean_name, pick_longest_name
+import json
 
-df = pd.read_parquet("data/project_a_samples.parquet")
-print("\nRule-Based Predictions:")
-grouped = df.groupby("base_id")
-count = 0
-for base_id, group in grouped:
-    names = []
-    for _, row in group.iterrows():
-        clean_name = get_clean_name(row["names"])
-        if clean_name:
-            names.append(clean_name)
-    best_name = pick_longest_name(names)
+from models.rule_based_method import (
+    get_clean_name,
+    predict_label
+)
 
-    print(f"\nBase ID: {base_id}")
-    print("Names:", names)
-    print("Predicted Best:", best_name)
+# Load datasets
+df = pd.read_parquet("../data/project_a_samples.parquet")
 
-    count += 1
-    if count == 5:
-        break
+with open("../data/golden_dataset_sample.json") as f:
+    golden_data = json.load(f)
+
+correct = 0
+total = 0
+
+for i in range(len(golden_data)):
+
+    current = get_clean_name(df.iloc[i]["names"])
+    base = get_clean_name(df.iloc[i]["base_names"])
+
+    prediction = predict_label(current, base)
+
+    actual = golden_data[i]["labels"]["name"]
+
+    if prediction == actual:
+        correct += 1
+
+    total += 1
+
+accuracy = correct / total
+
+print("\nRule-Based Model Results")
+print("------------------------")
+print("Correct:", correct)
+print("Total:", total)
+print("Accuracy:", round(accuracy, 4))

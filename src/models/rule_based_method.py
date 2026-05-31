@@ -1,30 +1,25 @@
-def get_clean_name(name_str): #takes name
+def get_clean_name(name_str):
     import json
+
     try:
         name_dict = json.loads(name_str)
         return name_dict.get("primary", "")
     except:
         return ""
-    
-#first rule: for a group of names, pick the best one
-def pick_longest_name(names):
-    if not names:
-        return ""
-    return max(names, key=len)
+def predict_label(current, base):
+    """
+    Predict whether the current value, base value,
+    or both values should be selected.
+    """
 
-if __name__ == "__main__": #test
-    test_names = ["CVS", "CVS Pharmacy", "CVS Store"]
-    print(pick_longest_name(test_names))
-
+    if current == base:
+        return "same"
+    elif len(base) > len(current):
+        return "base"
+    else:
+        return "current"
+# quick tests
 if __name__ == "__main__":
-    test_names = ["99 Ranch Market", "99 Ranch"]
-    print(pick_longest_name(test_names))
-
-"""
-if __name__ == "__main__":
-    test_names = ["99 Ranch Market", "99 Ranch", "99 Ranch market"]
-    print(pick_longest_name(test_names))
-"""
-
-
-
+    print(predict_label("BP", "BP"))  # same
+    print(predict_label("Norauto España", "Norauto"))  # current
+    print(predict_label("SushiCo", "SushiCo | Sushi & Bubble Tea Ede"))  # base
