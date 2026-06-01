@@ -1,13 +1,17 @@
 import pandas as pd
 import json
+import numpy as np
+
+from rapidfuzz import fuzz
 from rule_based_method import get_clean_name
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
-import numpy as np
 
-# Load data
+from scipy.sparse import hstack
+
 df = pd.read_parquet("../data/project_a_samples.parquet")
 
 with open("../data/golden_dataset_sample.json") as f:
@@ -17,28 +21,54 @@ names = []
 labels = []
 extra_features = []
 
+label_map = {
+"same": 0,
+"current": 1,
+"base": 2
+}
+
 for i in range(len(golden_data)):
-    label = golden_data[i]['labels']['name']
 
-    if label == "base":
+    label = golden_data[i]["labels"]["name"]
+
+    current = get_clean_name(df.iloc[i]["names"])
+    base = get_clean_name(df.iloc[i]["base_names"])
+
+    if not current or not base:
         continue
 
-    name = get_clean_name(df.iloc[i]['names'])
+    names.append(current + " " + base)
 
-    if not name:
-        continue
+    labels.append(label_map[label])
 
-    names.append(name)
-    labels.append(1 if label == "same" else 0)
+    exact_match = 1 if current == base else 0
 
-    word_count = len(name.split())
-    length = len(name)
-    is_short = 1 if (word_count == 1 and length < 6) else 0
+    similarity = fuzz.ratio(current, base)
 
-    extra_features.append([word_count, length, is_short])
+    current_len = len(current)
+    base_len = len(base)
 
+    current_words = len(current.split())
+    base_words = len(base.split())
+
+    length_diff = current_len - base_len
+    word_diff = current_words - base_words
+
+    extra_features.append([
+        exact_match,
+        similarity,
+        current_len,
+        base_len,
+        length_diff,
+        word_diff
+])
 X_train, X_test, y_train, y_test, f_train, f_test = train_test_split(
-    names, labels, extra_features, test_size=0.2, random_state=42
+names,
+labels,
+extra_features,
+test_size=0.2,
+random_state=42,
+stratify=labels
 )
 
 vectorizer = TfidfVectorizer(max_features=3000)
@@ -49,15 +79,18 @@ X_test_vec = vectorizer.transform(X_test)
 f_train = np.array(f_train)
 f_test = np.array(f_test)
 
-from scipy.sparse import hstack
 X_train_final = hstack([X_train_vec, f_train])
 X_test_final = hstack([X_test_vec, f_test])
 
-model = RandomForestClassifier(n_estimators=200, random_state=42)
+model = RandomForestClassifier(
+n_estimators=200,
+random_state=42
+)
+
 model.fit(X_train_final, y_train)
 
 preds = model.predict(X_test_final)
 
 accuracy = accuracy_score(y_test, preds)
 
-print("High-Performance ML Accuracy:", accuracy)
+print("ML Model Accuracy:", accuracy)
