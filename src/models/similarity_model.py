@@ -1,7 +1,7 @@
 from rapidfuzz import fuzz
 
 def get_similarity(name1, name2):
-    return fuzz.partial_ratio(name1, name2)
+    return fuzz.ratio(name1, name2)
 
 if __name__ == "__main__":
     print(get_similarity("CVS", "CVS Pharmacy"))

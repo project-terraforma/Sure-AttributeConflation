@@ -3,9 +3,9 @@ import json
 from similarity_model import get_similarity
 from rule_based_method import get_clean_name
 
-df = pd.read_parquet("data/project_a_samples.parquet")
+df = pd.read_parquet("../data/project_a_samples.parquet")
 
-with open("data/golden_dataset_sample.json") as f:
+with open("../data/golden_dataset_sample.json") as f:
     golden_data = json.load(f)
 
 print("\nSimilarity-Based Classification:")
@@ -20,11 +20,23 @@ for i in range(len(golden_data)):
         continue
 
     row = df.iloc[i]
-    name = get_clean_name(row['names'])
-    score = get_similarity(name, name)
+    current = get_clean_name(row['names'])
+    base = get_clean_name(row['base_names'])
 
-    if score > 70:
+    score = get_similarity(current, base)
+
+    if total < 20:
+        print("\nCURRENT:", current)
+        print("BASE:", base)
+        print("SCORE:", score)
+        print("LABEL:", label)
+
+    if score > 95:
         prediction = "same"
+
+    elif len(base) > len(current):
+        prediction = "base"
+
     else:
         prediction = "current"
 

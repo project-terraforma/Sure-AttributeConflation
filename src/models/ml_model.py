@@ -8,9 +8,9 @@ from sklearn.metrics import accuracy_score
 import numpy as np
 
 # Load data
-df = pd.read_parquet("data/project_a_samples.parquet")
+df = pd.read_parquet("../data/project_a_samples.parquet")
 
-with open("data/golden_dataset_sample.json") as f:
+with open("../data/golden_dataset_sample.json") as f:
     golden_data = json.load(f)
 
 names = []
